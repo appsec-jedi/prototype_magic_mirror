@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <script type="text/javascript" src="/public/vendors/date.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.css" />
+    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="/public/scripts/app.js"></script>
+    <script src="/public/scripts/traffic.js"></script>
+    <script src="/public/scripts/mirror-service.js"></script>
+    <script src="/public/scripts/news-service.js"></script>
+    <title>Who is the smartest mirror of them all?</title>
+  </head>
+  <body>
+    <main ng-app="smartMirror">
+      <section ng-controller="mirrorController as mirror">
+        <div>
+          <h1>{{mirror.time}}</h1>
+        </div>
+        <button ng-click="mirror.getWeather()">Bang it here for the weather</button>
+        <div>
+          <img src="{{mirror.icon}}">
+          <h3>Temp: {{mirror.temp}}</h3>
+          <h3>High: {{mirror.high}}</h3>
+          <h3>Low: {{mirror.low}}</h3>
+          <h3>Humidity: {{mirror.humidity}}</h3>
+          <h3>Wind: {{mirror.wind}}</h3>
+        </div>
+        <div>
+          <button ng-click = "mirror.getNews()">Get the news!</button>
+          <ul>
+            <li ng-repeat = "article in mirror.news">{{article.description}}</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <div style="width: 340px; height: 280px" id="mapContainer"></div>
+  </body>
+  <script>
+    /**
+      * Boilerplate map initialization code starts below:
+      */
+     // Step 1: initialize communication with the platform
+     var platform = new H.service.Platform({
+       app_id: 'LMPjTTLmUF63oOxxXmjk',
+       app_code: 'X6nTE_m_bsFaYWGRPhWZbg',
+       useCIT: true,
+       useHTTPS: true
+     });
+     var defaultLayers = platform.createDefaultLayers();
+
+     // Step 2: initialize a map  - not specificing a location will give a whole world view.
+     var map = new H.Map(document.getElementById('mapContainer'), defaultLayers.normal.map);
+
+     // Now enable traffic tiles and traffic incidents
+     enableTrafficInfo(map);
+  </script>
+</html>
