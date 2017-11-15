@@ -1,0 +1,15 @@
+#top  {
+  display: inline-block;
+}
+
+#time {
+  display: inline-block;
+  float: left;
+
+
+}
+#weather {
+  display: inline-block;
+  float: right;
+
+}
