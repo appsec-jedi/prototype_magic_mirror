@@ -23,19 +23,19 @@
         <div id="top">
           <div id="time">
             <h1>{{mirror.time}}</h1>
-          </div id="weather">
-            <div>
+          </div>
+            <div id="weather">
               <button ng-click="mirror.getWeather()">Bang it here for the weather</button>
               <img src="{{mirror.icon}}">
-              <h3>Temp: {{mirror.temp}}</h3>
-              <h3>High: {{mirror.high}}</h3>
-              <h3>Low: {{mirror.low}}</h3>
-              <h3>Humidity: {{mirror.humidity}}</h3>
-              <h3>Wind: {{mirror.wind}}</h3>
+              <h5>Temp: {{mirror.temp}}</h5>
+              <h5>High: {{mirror.high}}</h5>
+              <h5>Low: {{mirror.low}}</h5>
+              <h5>Humidity: {{mirror.humidity}}</h5>
+              <h5>Wind: {{mirror.wind}}</h5>
             </div>
         </div>
         <div id="bottom">
-          <div>
+          <div id="news">
             <button ng-click = "mirror.getNews()">Get the news!</button>
             <ul>
               <li ng-repeat = "article in mirror.news">{{article.description}}</li>

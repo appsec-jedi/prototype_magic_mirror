@@ -4,6 +4,9 @@ var app = angular.module('smartMirror', []);
     console.log("mirrorController loaded!");
 
     var ctrl = this;
+    var newsOneShowcase = false;
+    var news1 = null;
+    var news2 = null;
 
     ctrl.getWeather = function(){
       console.log("Getting the weather");
@@ -17,14 +20,35 @@ var app = angular.module('smartMirror', []);
       })
     }//end of getWeather
 
+    ctrl.toggleNews = function(){
+      console.log("running toggleNews");
+      setInterval( function(){
+        console.log("checking...");
+        if(newsOneShowcase == false ){
+          console.log("displaying news1");
+          ctrl.news = news1;
+          newsOneShowcase = true;
+          console.log(ctrl.news);
+        } else {
+          console.log('displaying news2');
+          ctrl.news = news2;
+          newsOneShowcase = false;
+          console.log(ctrl.news);
+        }
+      }, 5000);
+    }//end of toggleNews
+
     ctrl.getNews = function(){
       console.log("Getting the news");
       NewsService.fetchNews().then(function(news){
-        ctrl.news = news.articles;
+        news1 = news.articles.slice(0,5);
+        news2 = news.articles.slice(5,10);
+        ctrl.news = news1;
         console.log(ctrl.news);
+        ctrl.toggleNews();
       })
-    }
-    //
+    }//end of getNews
+
     ctrl.getTime = function() {
     // Create a date object with the current time
       var now = new Date();
