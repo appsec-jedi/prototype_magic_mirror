@@ -4,15 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <link rel="stylesheet" type="text/css" href="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.css" />
-    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-core.js"></script>
-    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-service.js"></script>
-    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.js"></script>
-    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="/public/scripts/app.js"></script>
-    <script src="/public/scripts/traffic.js"></script>
     <script src="/public/scripts/mirror-service.js"></script>
     <script src="/public/scripts/news-service.js"></script>
+    <script src="/public/scripts/video-service.js"></script>
     <link rel="stylesheet" type="text/css" href="public/styles/style.css" />
 
     <title>Who is the smartest mirror of them all?</title>
@@ -20,49 +17,36 @@
   <body>
     <main ng-app="smartMirror">
       <section ng-controller="mirrorController as mirror">
-        <div id="top">
-          <div id="time">
-            <h1>{{mirror.time}}</h1>
-          </div>
-            <div id="weather">
-              <button ng-click="mirror.getWeather()">Bang it here for the weather</button>
-              <img src="{{mirror.icon}}">
-              <h5>Temp: {{mirror.temp}}</h5>
-              <h5>High: {{mirror.high}}</h5>
-              <h5>Low: {{mirror.low}}</h5>
-              <h5>Humidity: {{mirror.humidity}}</h5>
-              <h5>Wind: {{mirror.wind}}</h5>
+        <!-- <button ng-click="mirror.getVideo()">PROOF OF CONCEPT</button> -->
+        <div ng-hide='mirror.showVideo'>
+          <div id="top">
+            <div id="time">
+              <h1>{{mirror.time}}</h1>
             </div>
-        </div>
-        <div id="bottom">
-          <div id="news">
-            <button ng-click = "mirror.getNews()">Get the news!</button>
-            <ul>
-              <li ng-repeat = "article in mirror.news">{{article.description}}</li>
-            </ul>
+              <div id="weather">
+                <button ng-click="mirror.getWeather()">Bang it here for the weather</button>
+                <img src="{{mirror.icon}}">
+                <h5>Temp: {{mirror.temp}}&#8457</h5>
+                <h5>High: {{mirror.high}}&#8457</h5>
+                <h5>Low: {{mirror.low}}&#8457</h5>
+                <h5>Humidity: {{mirror.humidity}}</h5>
+                <h5>Wind: {{mirror.wind}}</h5>
+              </div>
           </div>
-          <div style="width: 340px; height: 280px" id="mapContainer"></div>
+          <div ng-show=mirror.displayNews1 class="news">
+            <li ng-repeat = "article in mirror.news1">{{article.description}}</li>
+          </div>
+          <div ng-show=!mirror.displayNews1 class="news">
+            <li ng-repeat = "article in mirror.news2">{{article.description}}</li>
+          </div>
+        </div>
+        <div ng-show="mirror.showVideo">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/oHg5SJYRHA0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </section>
+      <div id="greeting">
+        <h3>{{mirror.greeting}}</h3>
+      </div>
     </main>
   </body>
-  <script>
-    /**
-      * Boilerplate map initialization code starts below:
-      */
-     // Step 1: initialize communication with the platform
-     var platform = new H.service.Platform({
-       app_id: 'LMPjTTLmUF63oOxxXmjk',
-       app_code: 'X6nTE_m_bsFaYWGRPhWZbg',
-       useCIT: true,
-       useHTTPS: true
-     });
-     var defaultLayers = platform.createDefaultLayers();
-
-     // Step 2: initialize a map  - not specificing a location will give a whole world view.
-     var map = new H.Map(document.getElementById('mapContainer'), defaultLayers.normal.map);
-
-     // Now enable traffic tiles and traffic incidents
-     enableTrafficInfo(map);
-  </script>
 </html>

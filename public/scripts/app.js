@@ -1,12 +1,12 @@
 var app = angular.module('smartMirror', []);
 
-  app.controller('mirrorController', function(MirrorService,NewsService){
+  app.controller('mirrorController', function($scope,MirrorService,NewsService,VideoService){
     console.log("mirrorController loaded!");
 
     var ctrl = this;
-    var newsOneShowcase = false;
-    var news1 = null;
-    var news2 = null;
+    ctrl.showVideo = false;
+    ctrl.displayNews1 = false;
+    ctrl.news;
 
     ctrl.getWeather = function(){
       console.log("Getting the weather");
@@ -20,20 +20,31 @@ var app = angular.module('smartMirror', []);
       })
     }//end of getWeather
 
+    // ctrl.getWeather();
+
     ctrl.toggleNews = function(){
       console.log("running toggleNews");
+      // var myEl = angular.element( document.querySelector( '.news' ) );
       setInterval( function(){
-        console.log("checking...");
-        if(newsOneShowcase == false ){
-          console.log("displaying news1");
-          ctrl.news = news1;
-          newsOneShowcase = true;
-          console.log(ctrl.news);
+        console.log("switching the news");
+        // myEl.empty();
+        if (ctrl.displayNews1 == true){
+          $scope.$apply(function(){
+                ctrl.displayNews1 = false;
+                ctrl.news = ctrl.news2;
+            });
+          console.log("switching to news2");
+          // ctrl.displayNews1 = false;
+          // ctrl.displayNews2 = true;
         } else {
-          console.log('displaying news2');
-          ctrl.news = news2;
-          newsOneShowcase = false;
-          console.log(ctrl.news);
+          $scope.$apply(function(){
+                ctrl.displayNews1 = true;
+                ctrl.news = ctrl.news1;
+            });
+
+          console.log("switching to news1");
+          // ctrl.displayNews1 = true;
+          // ctrl.displayNews2 = false;
         }
       }, 5000);
     }//end of toggleNews
@@ -41,13 +52,14 @@ var app = angular.module('smartMirror', []);
     ctrl.getNews = function(){
       console.log("Getting the news");
       NewsService.fetchNews().then(function(news){
-        news1 = news.articles.slice(0,5);
-        news2 = news.articles.slice(5,10);
-        ctrl.news = news1;
-        console.log(ctrl.news);
-        ctrl.toggleNews();
+        ctrl.displayNews1 = true;
+        ctrl.news1 = news.articles.slice(0,5);
+        ctrl.news2 = news.articles.slice(5,10);
+
+        // ctrl.toggleNews();
       })
     }//end of getNews
+    ctrl.getNews();
 
     ctrl.getTime = function() {
     // Create a date object with the current time
@@ -74,6 +86,53 @@ var app = angular.module('smartMirror', []);
 
     ctrl.getTime();
 
-  }); //end of smartMirror
+    ctrl.getVideo = function(){
+      $scope.$apply(function(){
+            ctrl.showVideo = true;
+        });
+      console.log(ctrl.showVideo);
+      // VideoService.fetchVideo().then(function(video){
+      //   console.log(video);
 
-  // , now.getSeconds() ]
+      // });
+    };//end of getVideo
+
+
+    ctrl.greeting = ["Sup meatbag?","Looking good player!","That's what you're wearing?","Life is meaningless"];
+
+
+    // if (annyang) {
+    //   var spotify = function(input) {
+    //     alert("searching spotify for " + input);
+    //   }
+    //   var youtube = function(input) {
+    //     // alert("searching youtube for " + input);
+    //     ctrl.getVideo();
+    //   }
+    //   var main = function(){
+    //     $scope.$apply(function(){
+    //           ctrl.showVideo = false;
+    //       });
+    //     console.log(ctrl.showVideo);
+    //   }
+    //
+    //
+    //   // Let's define a command.
+    //   var commands = {
+    //     'play *input': spotify,
+    //     'search youtube for *input': youtube,
+    //     'back to main': main,
+    //     'hello': function() { alert('Hello world!'); },
+    //
+    //   };
+    //
+    //   // Add our commands to annyang
+    //   annyang.addCommands(commands);
+    //
+    //
+    //
+    //   // Start listening.
+    //   annyang.start();
+    // }
+
+  }); //end of smartMirror
